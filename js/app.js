@@ -11,10 +11,8 @@ let cardSymbols = [
 			'bomb', 'bomb'
 			];
 
-let deck = document.getElementById('deck'),	
-	li = deck.getElementsByTagName('li'),
-	cards = [... li],
-	cardSymbol;
+let deck = document.getElementById('deck'),
+	cardSymbol,	li, cards;
 
 // Shuffle cards
 function shuffle(array) {
@@ -34,17 +32,23 @@ function shuffle(array) {
 // Create card HTML 
 function CardHTML() {
 	for (let i = 0; i <= cardSymbols.length-1 ; i++) {
-		cardSymbol = `<li class="card"><i class="fa fa-${cardSymbols[i]}"></i></li>`;
-		deck.innerHTML += cardSymbol;
+		let cardSymbol = `<li class="card"><i class="fa fa-${cardSymbols[i]}"></i></li>`;
+		deck.innerHTML += cardSymbol;		
 	}
 }
 
-function gameInit() {
+// game initialization
+(function gameInit() {
 	'use strict';	
 	shuffle(cardSymbols);
 	CardHTML();
-}
-gameInit();
+})();
+
+// Redeclare cards array to iterate after Li created
+li = deck.getElementsByTagName('li');
+cards = [... li];
+
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -58,42 +62,71 @@ gameInit();
 
 
 // add open cards to open list and check that it only receive two cards
-function openCards(openCard) {
-	let open = [];
-	
-	cards = [... li];
-	for (card of cards) {
-		if(card.classList.contains('open', 'show')) {
-			open.push(card);
-			if(open.length > 2)	{
-				open = [];
-				resetDeck();
+let open;
+function openCards() {
+	open = [];
+	// Build up open cards
+	let promise = new Promise((resolve) => {
+		for (card of cards) {
+			if(card.classList.contains('open', 'show')) {
+				open.push(card);
 			}
 		}
-		
-	}
-
+		resolve(open);
+	});
+	promise.then((open) => {
+		// Check if cards match or not
+		if(open.length % 2 === 0) {
+			if(open[open.length -1].childNodes[0].className == open[open.length -2].childNodes[0].className) {
+				console.log("match");			
+				matchedCards();
+			} else {			
+				UnmatchedCards();		
+				console.log("Not match");
+			}
+		}	
+	});
+	
 	console.log(open);
 }
+
+// match function to lock up matched cards in open position
+function matchedCards() {
+	for(item of open) {
+		item.classList.add('match');
+	};
+}
+
+// Unmatch function to remove cards from opencards list and remove their symbols
+function UnmatchedCards() {
+	open.splice(-1, 1);
+	setTimeout(() => {
+		resetDeck();
+	}, 500);
+	
+};
 
 // Event Listener Function
 function cardListerener(evt) {
 	evt.preventDefault();
-	cardSymbol = evt.target.classList.add('open', 'show');	
-	openCards(cardSymbol);
+
+	for (card of cards) {
+		card = evt.target;
+	}
+	card.classList.add('open', 'show');	
+	openCards();
 }
 
 // function to show cards
 (function clickCard() {
-	cards = [... li];
 	for (card of cards) {
 		card.addEventListener('click', cardListerener);		
 	}
 })();
+
 // reset cards to original state
 function resetDeck() {
 	console.log('salma');
-	cards = [... li];
 	for (card of cards) {
 		card.classList.remove('open', 'show');		
 	}
