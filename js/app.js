@@ -13,9 +13,8 @@ let cardSymbols = [
 
 let deck = document.getElementById('deck'),	
 	li = deck.getElementsByTagName('li'),
-	cards = [],
-	cardSymbol,
-	symbol;
+	cards = [... li],
+	cardSymbol;
 
 // Shuffle cards
 function shuffle(array) {
@@ -57,33 +56,31 @@ gameInit();
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-function matchCards() {
-	/*if(open[0].children.hasAttribute('class') === open[1].children.hasAttribute('class')) {
-		console.log(true);
-	} else {
-		console.log(false);
-	}*/
-}
 
+// add open cards to open list and check that it only receive two cards
 function openCards(openCard) {
 	let open = [];
-	open.push(openCard);
-	console.log(open);
-	if(open[0]){
-		matchCards();
+	
+	cards = [... li];
+	for (card of cards) {
+		if(card.classList.contains('open', 'show')) {
+			open.push(card);
+			if(open.length > 2)	{
+				open = [];
+				resetDeck();
+			}
+		}
+		
 	}
+
+	console.log(open);
 }
 
 // Event Listener Function
 function cardListerener(evt) {
 	evt.preventDefault();
-	cards = [... li];
-	for (card of cards) {
-		card = evt.target;
-	}
-	card.classList.add('open', 'show');
-	let cardHTML = card.outerHTML;
-	openCards(cardHTML);
+	cardSymbol = evt.target.classList.add('open', 'show');	
+	openCards(cardSymbol);
 }
 
 // function to show cards
@@ -93,15 +90,17 @@ function cardListerener(evt) {
 		card.addEventListener('click', cardListerener);		
 	}
 })();
+// reset cards to original state
+function resetDeck() {
+	console.log('salma');
+	cards = [... li];
+	for (card of cards) {
+		card.classList.remove('open', 'show');		
+	}
+}
 
-// reset function
-(function ResetDeck() {
+// restart function
+(function RestartDeck() {
 	const reset = document.getElementById('reset');
-	reset.addEventListener('click', function(){
-		console.log('salma');
-		cards = [... li];
-		for (card of cards) {
-			card.classList.remove('open', 'show');		
-		}
-	});
+	reset.addEventListener('click', resetDeck);
 })();
