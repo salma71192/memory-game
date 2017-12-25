@@ -56,7 +56,7 @@ let open = [],
 	winParagraph = winBox.querySelector('p'),		
 	winButton = winBox.querySelector('button'),
 	starNumber = 3,
-	starString = 'stars';
+	starString = ' stars';
 
 
 // add open cards to open list and check that it only receive two cards
@@ -64,7 +64,7 @@ function openCards() {
 	// Build up open cards
 	let promise = new Promise((resolve) => {
 			if(card.classList.contains('open', 'show')) {
-				open.push(card);
+				open.push(card);					
 			}
 		resolve(open);
 	});
@@ -80,6 +80,7 @@ function openCards() {
 			}
 		}	
 	});
+	starCounter();
 }
 let stars = document.querySelectorAll('.fa-star');
 
@@ -87,28 +88,6 @@ let stars = document.querySelectorAll('.fa-star');
 function moveCounter() {
 	counter++;
 	moveBox.innerHTML = counter;
-
-	if(counter === 16) {
-		stars[2].style.color = 'black';
-	} else if(counter === 20) {
-		stars[1].style.color = 'black';
-	} else if(counter >= 24) {
-		stars[0].style.color = 'black';
-	}
-}
-
-
-// star function
-function starCount() {
-	if((stars[2].style.color = 'black') && (stars[1].style.color = 'black') && (stars[0].style.color = 'black')) {
-		starNumber = '';
-		starString = 'no stars';		
-	} else if((stars[2].style.color = 'black') && (stars[1].style.color = 'black')) {
-		starNumber = 1;
-		starString = 'star';
-	} else if(stars[2].style.color = 'black') {
-		starNumber = 2;
-	}
 }
 
 let match = [];
@@ -123,7 +102,6 @@ function matchedCards() {
 		}
 	}
 	if(match.length === 16){
-		starCount();
 		win();
 	}
 	open = [];
@@ -134,9 +112,11 @@ function win() {
 	setTimeout(() => {
 		gameContainer.style.display = "none";
 		winBox.style.display = "block";	
-		
+
+		let gameEnd_timer = (pad(parseInt(totalSeconds / 60)))  + ':' + (pad(totalSeconds % 60));
+
 		winParagraph.textContent = `You won with ${starNumber} ${starString} and ${counter} moves.
-		Your Time: ${timer} min.`;
+		Your Time: ${gameEnd_timer} min.`;
 		}, 500);	
 } 
 
@@ -155,20 +135,20 @@ function UnmatchedCards() {
 	
 };
 
-// Event Listener Function: when clip on a card
-function clickCard_Listerener(evt) {
+// Event Listener Function: when click on a card
+function clickCard_Listener(evt) {
 	evt.preventDefault();
 	for (card of cards) {
 		card = evt.target;
 	}
-	card.classList.add('open', 'show');	
+	card.classList.add('open', 'show');
 	openCards();
 }
 
 // function to open cards
 (function clickCard() {
 	for (card of cards) {
-		card.addEventListener('click', clickCard_Listerener);		
+		card.addEventListener('click', clickCard_Listener);
 	}
 })();
 
@@ -192,7 +172,6 @@ function restartDeck_Listener() {
 	for(star of stars) {
 		star.style.color = 'yellow';
 	}
-	clearInterval(timer);
 	totalSeconds = 0;
 	timer = setInterval(setTime, 1000);
 
@@ -203,6 +182,8 @@ function restartDeck() {
 	restartBtn.addEventListener('click', restartDeck_Listener);
 };
 restartDeck();
+
+
 // function play again to restart the game when click on play again button
 function playAgain() {
 	setTimeout(() => {
@@ -218,11 +199,28 @@ function playAgain() {
 })();
 
 
+// starCounter function
+function starCounter() {
+	if(counter === 16) {
+		stars[2].style.color = 'black';
+		starNumber = 2;
+	} else if(counter === 21) {
+		stars[1].style.color = 'black';
+		starNumber = 1;
+		starString = 'star';
+	} else if(counter > 24) {
+		stars[0].style.color = 'black';
+		starNumber = '';
+		starString = 'no stars';
+	}
+}
+
+
 // function game timer
 let minutesLabel = document.getElementById("minutes"),
 	secondsLabel = document.getElementById("seconds"),
-	totalSeconds = 0,
-	timer = setInterval(setTime, 1000);
+	totalSeconds = 0;
+	setInterval(setTime, 1000);
 
 function setTime() {
   ++totalSeconds;
