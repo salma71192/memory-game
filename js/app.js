@@ -120,14 +120,14 @@ function matchedCards() {
 	}
 	open = [];
 }
-
-// win function 
-function win() {
-	let gameContainer = document.getElementById('container'),
+let gameContainer = document.getElementById('container'),
 		winBox = document.getElementById('win'),
-		winParagraph = winBox.querySelector('p'),
+		winParagraph = winBox.querySelector('p'),		
+		winButton = winBox.querySelector('button'),
 		starNumber = 3,
 		starString = 'stars';
+// win function 
+function win() {
 
 	setTimeout(() => {
 			gameContainer.style.display = "none";
@@ -150,13 +150,6 @@ function win() {
 	
 } 
 
-// function restart the game
-function restartGame() {
-	setTimeout(() => {
-			gameContainer.style.display = "block";
-			winBox.style.display = "none";
-		}, 500);
-}
 
 // Unmatch function to remove cards from opencards list and remove their symbols
 function UnmatchedCards() {
@@ -167,7 +160,7 @@ function UnmatchedCards() {
 		console.log(open);
 	}
 	setTimeout(() => {
-		resetDeck();
+		flipCards();
 	}, 500);
 	
 };
@@ -191,7 +184,7 @@ function cardListerener(evt) {
 })();
 
 // reset cards to original state
-function resetDeck() {
+function flipCards() {
 	console.log('salma');
 	for (card of cards) {
 		card.classList.remove('open', 'show');		
@@ -199,7 +192,7 @@ function resetDeck() {
 }
 
 // restart function
-(function RestartDeck() {
+function RestartDeck() {
 	const reset = document.getElementById('reset');
 	reset.addEventListener('click', function() {
 		for (card of cards) {
@@ -213,9 +206,18 @@ function resetDeck() {
 			star.style.color = 'yellow';
 		}
 	});
+};
+
+// function play again to restart the game
+function playAgain() {
+	setTimeout(() => {
+			gameContainer.style.display = "flex";
+			winBox.style.display = "none";
+		}, 500);
+	RestartDeck();
+	console.log('salmaaa');
+}
+
+(function() {
+	winButton.addEventListener('click', playAgain);
 })();
-
-
-/*
-	Star Rating
-*/

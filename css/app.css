@@ -128,7 +128,23 @@ h2 {
     font-size: 1.5em;
     color: #02ccba;
 }
- .win p {
-    font-size: 1.2em;
-    color: #aaa;
- }
+.win p {
+font-size: 1.2em;
+color: #aaa;
+}
+
+.win-btn {
+    padding: 10px 20px;
+    margin: 20px auto;
+    border: none;
+    background-color: #02ccba;
+    color: #fff;    
+    border-radius: 10px;
+    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+
+}
+
+.win-btn:hover {
+    background-color: rgba(2, 204, 186, 0.7);
+}
+
