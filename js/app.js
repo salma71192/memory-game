@@ -88,11 +88,20 @@ function openCards() {
 		}	
 	});
 }
+let stars = document.querySelectorAll('.fa-star');
 
 // counter Function 
 function moveCounter() {
 	counter++;
+	moveBox.innerHTML = counter;
 	console.log(counter);
+	if(counter === 16) {
+		stars[2].style.color = 'black';
+	} else if(counter === 20) {
+		stars[1].style.color = 'black';
+	} else if(counter >= 24) {
+		stars[0].style.color = 'black';
+	}
 }
 
 var match = [];
@@ -114,14 +123,40 @@ function matchedCards() {
 
 // win function 
 function win() {
-	const gameContainer = document.getElementById('container');
-	const winBox = document.getElementById('win');
+	let gameContainer = document.getElementById('container'),
+		winBox = document.getElementById('win'),
+		winParagraph = winBox.querySelector('p'),
+		starNumber = 3,
+		starString = 'stars';
+
 	setTimeout(() => {
 			gameContainer.style.display = "none";
 			winBox.style.display = "block";
 		}, 500);
 	match = [];
+	
+	if(stars[2].style.color = 'black') {
+		starNumber = 2;
+	} else if(stars[1].style.color = 'black') {
+		starNumber = 1;
+		starString = 'star';
+	} else if(stars[0].style.color = 'black') {
+		starNumber = '';
+		starString = 'no stars';
+	}
+	setTimeout(() => {
+		winParagraph.textContent = `You won with ${starNumber} ${starString} and ${counter} moves`;
+	}, 500);
+	
 } 
+
+// function restart the game
+function restartGame() {
+	setTimeout(() => {
+			gameContainer.style.display = "block";
+			winBox.style.display = "none";
+		}, 500);
+}
 
 // Unmatch function to remove cards from opencards list and remove their symbols
 function UnmatchedCards() {
@@ -172,6 +207,11 @@ function resetDeck() {
 			open = [];
 			match = [];		
 		}
+		counter = 0;		
+		moveBox.innerHTML = counter;
+		for(star of stars) {
+			star.style.color = 'yellow';
+		}
 	});
 })();
 
@@ -179,8 +219,3 @@ function resetDeck() {
 /*
 	Star Rating
 */
-
-(function star() {
-	//according moves number
-	
-})();

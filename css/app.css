@@ -98,6 +98,10 @@ h2 {
     margin: 0 5px 0 0;
 }
 
+.fa-star {
+    color: yellow;
+}
+
 .score-panel .stars li {
     list-style: none;
     display: inline-block;
