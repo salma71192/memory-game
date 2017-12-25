@@ -1,20 +1,18 @@
 # Memory Game Project
 
-## Table of Contents
+## by Salma Mohammed
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
 
-## Instructions
+##  How to get the game:
+	1- Clone the repo or download the zip file.
+	2- Copy index.html path and open it in your browser.
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+## How to play?
+- Start flipping cards to find corresponding cards' symbols.
+- Matched cards stay flipped over.
+- The game will end once all cards have been correctly matched.
 
-To get started, open `js/app.js` and start building out the app's functionality
-
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+## Features:
+- You will get 3 stars rating which will drop with more moves to end the game.
+- There is a timer which will track your progress throughout the game.
+- a Pop up window will appear after finishing the game telling the player his star rating, time, number of moves and asking him if he want to play again.
