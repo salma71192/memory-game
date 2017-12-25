@@ -115,6 +115,15 @@ h2 {
     margin: 0 5px 0 10px;
 }
 
+.timer {
+    display: block;
+    float: right;
+}
+
+/*
+ * Styles for the winning box
+ */
+
 .win {
     display: none;
     width: 400px;
@@ -158,7 +167,3 @@ color: #aaa;
     outline: none;
 }
 
-.timer {
-    display: block;
-    float: right;
-}
