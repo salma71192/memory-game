@@ -62,7 +62,9 @@ cards = [... li];
 
 
 // add open cards to open list and check that it only receive two cards
-let open = [];
+let open = [],
+	moveBox = document.getElementById('moves'),
+	counter = 0;
 function openCards() {
 	// Build up open cards
 	let promise = new Promise((resolve) => {
@@ -77,13 +79,22 @@ function openCards() {
 			if(open[open.length -1].childNodes[0].className == open[open.length -2].childNodes[0].className) {
 				console.log("match");			
 				matchedCards();
+				moveCounter();
 			} else {			
 				UnmatchedCards();		
 				console.log("Not match");
+				moveCounter();
 			}
 		}	
 	});
 }
+
+// counter Function 
+function moveCounter() {
+	counter++;
+	console.log(counter);
+}
+
 var match = [];
 // match function to lock up matched cards in open position
 function matchedCards() {
@@ -171,4 +182,5 @@ function resetDeck() {
 
 (function star() {
 	//according moves number
+	
 })();
