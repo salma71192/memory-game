@@ -62,16 +62,13 @@ cards = [... li];
 
 
 // add open cards to open list and check that it only receive two cards
-let open;
+let open = [];
 function openCards() {
-	open = [];
 	// Build up open cards
 	let promise = new Promise((resolve) => {
-		for (card of cards) {
 			if(card.classList.contains('open', 'show')) {
 				open.push(card);
 			}
-		}
 		resolve(open);
 	});
 	promise.then((open) => {
@@ -86,20 +83,34 @@ function openCards() {
 			}
 		}	
 	});
-	
-	console.log(open);
 }
-
+var match = [];
 // match function to lock up matched cards in open position
 function matchedCards() {
-	for(item of open) {
-		item.classList.add('match');
-	};
+	open[open.length -1].classList.add('match');
+	open[open.length -2].classList.add('match');
+	for (var i = 0; i < open.length; i++) {
+		if(open[i].classList.contains('match') === true) {
+			match.push(open[i]);
+		}
+	}
+	console.log(match);
+	if(match.length === 16){ 
+		setTimeout(() => {
+			alert("bravooooooooooo");
+		}, 500);
+	}
+	open = [];
 }
 
 // Unmatch function to remove cards from opencards list and remove their symbols
 function UnmatchedCards() {
-	open.splice(-1, 1);
+	for (var i = 0; i < open.length; i++) {
+		if(open[i].classList.contains('open', 'show') === true) {
+			open = [];
+		}
+		console.log(open);
+	}
 	setTimeout(() => {
 		resetDeck();
 	}, 500);
@@ -135,5 +146,11 @@ function resetDeck() {
 // restart function
 (function RestartDeck() {
 	const reset = document.getElementById('reset');
-	reset.addEventListener('click', resetDeck);
+	reset.addEventListener('click', function() {
+		for (card of cards) {
+			card.classList.remove('open', 'show', 'match');
+			open = [];
+			match = [];		
+		}
+	});
 })();
