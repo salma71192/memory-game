@@ -16,23 +16,28 @@
         </header>
 
         <section class="score-panel">
-        	<ul class="stars">
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        	</ul>
+        	<div>
+                <ul class="stars">
+                    <li><i class="fa fa-star"></i></li>
+                    <li><i class="fa fa-star"></i></li>
+                    <li><i class="fa fa-star"></i></li>
+                </ul>
+                <span id="moves" class="moves">0</span> Moves   
+            </div>
 
-        	<span id="moves" class="moves">0</span> Moves
+            <div class="timer">
+                <label id="minutes">00</label>:<label id="seconds">00</label>
+            </div>
 
-            <div class="restart" id="reset">
-        		<i class="fa fa-repeat"></i>
-        	</div>
+            <div class="restart" >
+        		<button class="restart-btn" id="restart-btn">Restart</button>
+        	</div>            
         </section>
 
         <ul class="deck" id="deck" </ul>
     </div>
     <div id="win" class="win">
-        <h2 class="win-header">Congratulation! You won!</h2>
+        <h2 class="win-header">Congratulation!</h2>
         <p></p>
         <button class="win-btn">Play Again!</button>
     </div>

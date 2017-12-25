@@ -86,8 +86,11 @@ h2 {
  */
 
 .score-panel {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     text-align: left;
-    width: 345px;
+    width: 600px;
     margin-bottom: 10px;
 }
 
@@ -107,15 +110,14 @@ h2 {
     display: inline-block;
 }
 
-.score-panel .restart {
-    float: right;
-    cursor: pointer;
+.moves {
+    color: green;
+    margin: 0 5px 0 10px;
 }
 
 .win {
     display: none;
     width: 400px;
-    height: 200px;
     background-color: #fff;
     text-align: center;
     margin: calc(400px/2) auto;
@@ -133,7 +135,9 @@ font-size: 1.2em;
 color: #aaa;
 }
 
-.win-btn {
+.win-btn,
+.restart-btn {
+    display: block;
     padding: 10px 20px;
     margin: 20px auto;
     border: none;
@@ -141,10 +145,20 @@ color: #aaa;
     color: #fff;    
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
-
+    cursor: pointer;
 }
 
-.win-btn:hover {
+.win-btn:hover,
+.restart-btn:hover {
     background-color: rgba(2, 204, 186, 0.7);
 }
 
+.win-btn:focus,
+.restart-btn:focus {
+    outline: none;
+}
+
+.timer {
+    display: block;
+    float: right;
+}

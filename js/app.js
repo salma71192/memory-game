@@ -48,23 +48,18 @@ function CardHTML() {
 li = deck.getElementsByTagName('li');
 cards = [... li];
 
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+let open = [],
+	moveBox = document.getElementById('moves'),
+	counter = 0,	
+	gameContainer = document.getElementById('container'),
+	winBox = document.getElementById('win'),
+	winParagraph = winBox.querySelector('p'),		
+	winButton = winBox.querySelector('button'),
+	starNumber = 3,
+	starString = 'stars';
 
 
 // add open cards to open list and check that it only receive two cards
-let open = [],
-	moveBox = document.getElementById('moves'),
-	counter = 0;
 function openCards() {
 	// Build up open cards
 	let promise = new Promise((resolve) => {
@@ -77,12 +72,10 @@ function openCards() {
 		// Check if cards match or not
 		if(open.length % 2 === 0) {
 			if(open[open.length -1].childNodes[0].className == open[open.length -2].childNodes[0].className) {
-				console.log("match");			
 				matchedCards();
 				moveCounter();
 			} else {			
-				UnmatchedCards();		
-				console.log("Not match");
+				UnmatchedCards();	
 				moveCounter();
 			}
 		}	
@@ -94,7 +87,7 @@ let stars = document.querySelectorAll('.fa-star');
 function moveCounter() {
 	counter++;
 	moveBox.innerHTML = counter;
-	console.log(counter);
+
 	if(counter === 16) {
 		stars[2].style.color = 'black';
 	} else if(counter === 20) {
@@ -104,7 +97,22 @@ function moveCounter() {
 	}
 }
 
-var match = [];
+
+// star function
+function starCount() {
+	if((stars[2].style.color = 'black') && (stars[1].style.color = 'black') && (stars[0].style.color = 'black')) {
+		starNumber = '';
+		starString = 'no stars';		
+	} else if((stars[2].style.color = 'black') && (stars[1].style.color = 'black')) {
+		starNumber = 1;
+		starString = 'star';
+	} else if(stars[2].style.color = 'black') {
+		starNumber = 2;
+	}
+}
+
+let match = [];
+
 // match function to lock up matched cards in open position
 function matchedCards() {
 	open[open.length -1].classList.add('match');
@@ -114,40 +122,22 @@ function matchedCards() {
 			match.push(open[i]);
 		}
 	}
-	console.log(match);
-	if(match.length === 16){ 
+	if(match.length === 16){
+		starCount();
 		win();
 	}
 	open = [];
 }
-let gameContainer = document.getElementById('container'),
-		winBox = document.getElementById('win'),
-		winParagraph = winBox.querySelector('p'),		
-		winButton = winBox.querySelector('button'),
-		starNumber = 3,
-		starString = 'stars';
+
 // win function 
 function win() {
-
 	setTimeout(() => {
-			gameContainer.style.display = "none";
-			winBox.style.display = "block";
-		}, 500);
-	match = [];
-	
-	if(stars[2].style.color = 'black') {
-		starNumber = 2;
-	} else if(stars[1].style.color = 'black') {
-		starNumber = 1;
-		starString = 'star';
-	} else if(stars[0].style.color = 'black') {
-		starNumber = '';
-		starString = 'no stars';
-	}
-	setTimeout(() => {
-		winParagraph.textContent = `You won with ${starNumber} ${starString} and ${counter} moves`;
-	}, 500);
-	
+		gameContainer.style.display = "none";
+		winBox.style.display = "block";	
+		
+		winParagraph.textContent = `You won with ${starNumber} ${starString} and ${counter} moves.
+		Your Time: ${timer} min.`;
+		}, 500);	
 } 
 
 
@@ -165,10 +155,9 @@ function UnmatchedCards() {
 	
 };
 
-// Event Listener Function
-function cardListerener(evt) {
+// Event Listener Function: when clip on a card
+function clickCard_Listerener(evt) {
 	evt.preventDefault();
-
 	for (card of cards) {
 		card = evt.target;
 	}
@@ -176,48 +165,77 @@ function cardListerener(evt) {
 	openCards();
 }
 
-// function to show cards
+// function to open cards
 (function clickCard() {
 	for (card of cards) {
-		card.addEventListener('click', cardListerener);		
+		card.addEventListener('click', clickCard_Listerener);		
 	}
 })();
 
-// reset cards to original state
+// flip cards to original state
 function flipCards() {
-	console.log('salma');
 	for (card of cards) {
 		card.classList.remove('open', 'show');		
 	}
 }
 
 // restart function
-function RestartDeck() {
-	const reset = document.getElementById('reset');
-	reset.addEventListener('click', function() {
-		for (card of cards) {
-			card.classList.remove('open', 'show', 'match');
-			open = [];
-			match = [];		
-		}
-		counter = 0;		
-		moveBox.innerHTML = counter;
-		for(star of stars) {
-			star.style.color = 'yellow';
-		}
-	});
-};
+let restartBtn = document.getElementById('restart-btn');
+function restartDeck_Listener() {
+	for (card of cards) {
+		card.classList.remove('open', 'show', 'match');
+		open = [];
+		match = [];	
+	}
+	counter = 0;		
+	moveBox.innerHTML = counter;
+	for(star of stars) {
+		star.style.color = 'yellow';
+	}
+	clearInterval(timer);
+	totalSeconds = 0;
+	timer = setInterval(setTime, 1000);
 
-// function play again to restart the game
+	shuffle(cardSymbols);
+}
+
+function restartDeck() {
+	restartBtn.addEventListener('click', restartDeck_Listener);
+};
+restartDeck();
+// function play again to restart the game when click on play again button
 function playAgain() {
 	setTimeout(() => {
 			gameContainer.style.display = "flex";
 			winBox.style.display = "none";
+
 		}, 500);
-	RestartDeck();
-	console.log('salmaaa');
+	restartDeck_Listener();
 }
 
 (function() {
 	winButton.addEventListener('click', playAgain);
 })();
+
+
+// function game timer
+let minutesLabel = document.getElementById("minutes"),
+	secondsLabel = document.getElementById("seconds"),
+	totalSeconds = 0,
+	timer = setInterval(setTime, 1000);
+
+function setTime() {
+  ++totalSeconds;
+  secondsLabel.innerHTML = pad(totalSeconds % 60);
+  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+
