@@ -96,12 +96,21 @@ function matchedCards() {
 	}
 	console.log(match);
 	if(match.length === 16){ 
-		setTimeout(() => {
-			alert("bravooooooooooo");
-		}, 500);
+		win();
 	}
 	open = [];
 }
+
+// win function 
+function win() {
+	const gameContainer = document.getElementById('container');
+	const winBox = document.getElementById('win');
+	setTimeout(() => {
+			gameContainer.style.display = "none";
+			winBox.style.display = "block";
+		}, 500);
+	match = [];
+} 
 
 // Unmatch function to remove cards from opencards list and remove their symbols
 function UnmatchedCards() {
@@ -153,4 +162,13 @@ function resetDeck() {
 			match = [];		
 		}
 	});
+})();
+
+
+/*
+	Star Rating
+*/
+
+(function star() {
+	//according moves number
 })();
