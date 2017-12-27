@@ -75,22 +75,35 @@ function moveCounter() {
 }
 
 // add open cards to open list and check that it only receive two cards
+// Can you hear?yes but you don't? I dont hear you
+
 function openCards(card) {
     // Build up open cards
     let promise = new Promise((resolve) => {
-        if (card.classList.contains('open', 'show')) {
+        if (card.classList.contains('open', 'show') && !card.classList.contains('opened')) {
+            card.classList.add('opened');
             open.push(card);
+            console.log(open);
+            resolve(open);
         }
-        
+        else {
+            if(card.classList.contains('match')) {
+                alert('Matched card!');
+            } else {
+                card.classList.remove('open', 'show', 'animated', 'bounceIn', 'opened');
+                open.pop(-1);
+            }
+            
+        }
 
-        resolve(open);
+        
     });
     promise.then((open) => {
     		// Check if cards match or not
-	        if (open.length % 2 === 0) {
+            // You hear me right? I am not sure whether you are understanding .yes 
+	        if (open.length % 2 === 0 && open.length > 0) {
 
 	            if (open[open.length - 1].childNodes[0].className == open[open.length - 2].childNodes[0].className) {
-                    
 	                matchedCards();
 	                moveCounter();
 	            } else {
@@ -114,7 +127,7 @@ function matchedCards() {
             openItem.classList.remove('bounceIn');
             openItem.classList.add('match','rubberBand');
         });
-
+    
     if (open.length === 16) {
         win();
     }
@@ -139,6 +152,7 @@ function UnmatchedCards() {
         unmatchesCardsDelete.forEach(function(cardItem) {
             setTimeout(() => {
                 flipCards(cardItem);
+                cardItem.classList.remove('opened');
                 open.pop(unmatchesCardsDelete);
                 console.log(open);
             }, 500);
@@ -147,13 +161,14 @@ function UnmatchedCards() {
 
 // Event Listener Function: when click on a card
 function clickCard_Listener(evt) {
+
     evt.preventDefault();
+
 
     let target = evt.target;
     target.classList.add('open', 'show', 'animated', 'bounceIn');
-
-    openCards(target);
     
+    openCards(target);    
 }
 
 
