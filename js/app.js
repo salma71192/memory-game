@@ -81,23 +81,21 @@ function openCards(card) {
         if (card.classList.contains('open', 'show')) {
             open.push(card);
         }
-
+        
 
         resolve(open);
-        console.log(open);
     });
     promise.then((open) => {
     		// Check if cards match or not
 	        if (open.length % 2 === 0) {
 
 	            if (open[open.length - 1].childNodes[0].className == open[open.length - 2].childNodes[0].className) {
+                    
 	                matchedCards();
 	                moveCounter();
-                    console.log(open);
 	            } else {
 	                UnmatchedCards();
 	                moveCounter();
-                    console.log(open);
 	            }
 	        }
     	
@@ -113,7 +111,8 @@ let stars = document.querySelectorAll('.fa-star');
 function matchedCards() {
     let matchesCardsDelete = open.slice(-2);
         matchesCardsDelete.forEach(function (openItem){
-            openItem.classList.add('match');
+            openItem.classList.remove('bounceIn');
+            openItem.classList.add('match','rubberBand');
         });
 
     if (open.length === 16) {
@@ -145,16 +144,16 @@ function UnmatchedCards() {
             }, 500);
         });
 }
-let clicked = [];
+
 // Event Listener Function: when click on a card
 function clickCard_Listener(evt) {
-    
     evt.preventDefault();
-    let i = document.getElementsByTagName('i');
+
     let target = evt.target;
-    target.classList.add('open', 'show');
-    clicked.push(target);
+    target.classList.add('open', 'show', 'animated', 'bounceIn');
+
     openCards(target);
+    
 }
 
 
@@ -169,7 +168,11 @@ function clickCard_Listener(evt) {
 
 // flip cards to original state
 function flipCards(openItem) {
-    openItem.classList.remove('open', 'show');
+    openItem.classList.add('shake', 'red');
+    openItem.classList.remove('bounceIn');
+    setTimeout(() => {
+        openItem.classList.remove('open', 'show', 'shake', 'red');
+    }, 700);
 }
 
 // restart function

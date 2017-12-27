@@ -81,6 +81,10 @@ h2 {
     font-size: 33px;
 }
 
+.deck .card.red {
+    background: #ca0b1c;
+}
+
 /*
  * Styles for the Score Panel
  */
