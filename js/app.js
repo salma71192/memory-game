@@ -60,8 +60,19 @@ let open = [],
     winParagraph = winBox.querySelector('p'),
     winButton = winBox.querySelector('button'),
     starNumber = 3,
-    starString = ' stars';
+    starString = ' stars',
+    timer;
 
+// counter Function 
+function moveCounter() {
+    counter++;
+    moveBox.innerHTML = counter;
+    if(counter === 1) {
+        timer = setInterval(setTime, 1000);
+    } else if (counter === 0) {
+        clearInterval(timer);
+    }
+}
 
 // add open cards to open list and check that it only receive two cards
 function openCards(card) {
@@ -70,6 +81,8 @@ function openCards(card) {
         if (card.classList.contains('open', 'show')) {
             open.push(card);
         }
+
+
         resolve(open);
         console.log(open);
     });
@@ -94,11 +107,7 @@ function openCards(card) {
 }
 let stars = document.querySelectorAll('.fa-star');
 
-// counter Function 
-function moveCounter() {
-    counter++;
-    moveBox.innerHTML = counter;
-}
+
 
 // match function to lock up matched cards in open position
 function matchedCards() {
@@ -117,7 +126,6 @@ function win() {
     setTimeout(() => {
         gameContainer.style.display = "none";
         winBox.style.display = "block";
-
         let gameEnd_timer = (pad(parseInt(totalSeconds / 60))) + ':' + (pad(totalSeconds % 60));
 
         winParagraph.textContent = `You won with ${starNumber} ${starString} and ${counter} moves.
@@ -137,20 +145,26 @@ function UnmatchedCards() {
             }, 500);
         });
 }
-
+let clicked = [];
 // Event Listener Function: when click on a card
 function clickCard_Listener(evt) {
+    
     evt.preventDefault();
+    let i = document.getElementsByTagName('i');
     let target = evt.target;
     target.classList.add('open', 'show');
+    clicked.push(target);
     openCards(target);
 }
+
+
 
 // function to open cards
 (function clickCard() {
     for (card of cards) {
         card.addEventListener('click', clickCard_Listener);
-    } 
+    }
+
 })();
 
 // flip cards to original state
@@ -162,19 +176,26 @@ function flipCards(openItem) {
 let restartBtn = document.getElementById('restart-btn');
 
 function restartDeck_Listener() {
+    // reset all cards to the flipped over position
     for (card of cards) {
         card.classList.remove('open', 'show', 'match');
         open = [];
-        match = [];
     }
+
+    // reset move counter and timer to starting state
     counter = 0;
+    secondsLabel.innerHTML = '00'
+    clearInterval(timer);
+    totalSeconds = 0;
     moveBox.innerHTML = counter;
+
+    // reset the star rating to 3 stars
     for (star of stars) {
         star.style.color = 'yellow';
     }
 
+    // reshuffle the cards
     shuffle(cardSymbols);
-    totalSeconds = 0;
 }
 
 (function restartDeck() {
