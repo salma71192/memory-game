@@ -206,10 +206,9 @@ function restartDeck_Listener() {
 function playAgain() {
     setTimeout(() => {
         gameContainer.style.display = "flex";
-        winBox.style.display = "none";
-
+        winBox.style.display = "none";        
+        restartDeck_Listener();
     }, 500);
-    restartDeck_Listener();
 }
 
 (function() {
