@@ -64,26 +64,32 @@ let open = [],
 
 
 // add open cards to open list and check that it only receive two cards
-function openCards() {
+function openCards(card) {
     // Build up open cards
     let promise = new Promise((resolve) => {
         if (card.classList.contains('open', 'show')) {
             open.push(card);
         }
         resolve(open);
+        console.log(open);
     });
     promise.then((open) => {
-        // Check if cards match or not
-        if (open.length % 2 === 0) {
-            if (open[open.length - 1].childNodes[0].className == open[open.length - 2].childNodes[0].className) {
-                matchedCards();
-                moveCounter();
-            } else {
-                UnmatchedCards();
-                moveCounter();
-            }
-        }
+    		// Check if cards match or not
+	        if (open.length % 2 === 0) {
+
+	            if (open[open.length - 1].childNodes[0].className == open[open.length - 2].childNodes[0].className) {
+	                matchedCards();
+	                moveCounter();
+                    console.log(open);
+	            } else {
+	                UnmatchedCards();
+	                moveCounter();
+                    console.log(open);
+	            }
+	        }
+    	
     });
+
     starCounter();
 }
 let stars = document.querySelectorAll('.fa-star');
@@ -94,21 +100,16 @@ function moveCounter() {
     moveBox.innerHTML = counter;
 }
 
-let match = [];
-
 // match function to lock up matched cards in open position
 function matchedCards() {
-    open[open.length - 1].classList.add('match');
-    open[open.length - 2].classList.add('match');
-    for (var i = 0; i < open.length; i++) {
-        if (open[i].classList.contains('match') === true) {
-            match.push(open[i]);
-        }
-    }
-    if (match.length === 16) {
+    let matchesCardsDelete = open.slice(-2);
+        matchesCardsDelete.forEach(function (openItem){
+            openItem.classList.add('match');
+        });
+
+    if (open.length === 16) {
         win();
     }
-    open = [];
 }
 
 // win function 
@@ -127,39 +128,34 @@ function win() {
 
 // Unmatch function to remove cards from opencards list and remove their symbols
 function UnmatchedCards() {
-    for (var i = 0; i < open.length; i++) {
-        if (open[i].classList.contains('open', 'show') === true) {
-            open = [];
-        }
-    }
-    setTimeout(() => {
-        flipCards();
-    }, 500);
-
-};
+        let unmatchesCardsDelete = open.slice(-2);
+        unmatchesCardsDelete.forEach(function(cardItem) {
+            setTimeout(() => {
+                flipCards(cardItem);
+                open.pop(unmatchesCardsDelete);
+                console.log(open);
+            }, 500);
+        });
+}
 
 // Event Listener Function: when click on a card
 function clickCard_Listener(evt) {
     evt.preventDefault();
-    for (card of cards) {
-        card = evt.target;
-    }
-    card.classList.add('open', 'show');
-    openCards();
+    let target = evt.target;
+    target.classList.add('open', 'show');
+    openCards(target);
 }
 
 // function to open cards
 (function clickCard() {
     for (card of cards) {
         card.addEventListener('click', clickCard_Listener);
-    }
+    } 
 })();
 
 // flip cards to original state
-function flipCards() {
-    for (card of cards) {
-        card.classList.remove('open', 'show');
-    }
+function flipCards(openItem) {
+    openItem.classList.remove('open', 'show');
 }
 
 // restart function
@@ -176,10 +172,9 @@ function restartDeck_Listener() {
     for (star of stars) {
         star.style.color = 'yellow';
     }
-    totalSeconds = 0;
-    timer = setInterval(setTime, 1000);
 
     shuffle(cardSymbols);
+    totalSeconds = 0;
 }
 
 (function restartDeck() {
