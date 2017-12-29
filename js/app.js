@@ -67,11 +67,6 @@ let open = [],
 function moveCounter() {
     counter++;
     moveBox.innerHTML = counter;
-    if(counter === 1) {
-        timer = setInterval(setTime, 1000);
-    } else if (counter === 0) {
-        clearInterval(timer);
-    }
 }
 
 // add open cards to open list and check that it only receive two cards
@@ -81,12 +76,21 @@ function openCards(card) {
     // Build up open cards
     let promise = new Promise((resolve) => {
         if (card.classList.contains('open', 'show') && !card.classList.contains('opened')) {
+            
             card.classList.add('opened');
             open.push(card);
-            console.log(open);
             resolve(open);
-        }
-        else {
+
+            //start timer with first card clicked
+            if(!card.parentNode.classList.contains('startTimer')) {
+                card.parentNode.classList.add('startTimer');
+                timer = setInterval(setTime, 1000);
+            } else {
+                console.log("stimer has already started");
+            }
+            
+            
+        } else {
             if(card.classList.contains('match')) {
                 alert('Matched card!');
             } else {
@@ -95,13 +99,13 @@ function openCards(card) {
             }
             
         }
-
         
+       
     });
     promise.then((open) => {
-    		// Check if cards match or not
-            // You hear me right? I am not sure whether you are understanding .yes 
+    		// Check if cards match or not 
 	        if (open.length % 2 === 0 && open.length > 0) {
+                console.log(open);
 
 	            if (open[open.length - 1].childNodes[0].className == open[open.length - 2].childNodes[0].className) {
 	                matchedCards();
@@ -160,15 +164,10 @@ function UnmatchedCards() {
 }
 
 // Event Listener Function: when click on a card
-function clickCard_Listener(evt) {
-
-    evt.preventDefault();
-
-
-    let target = evt.target;
-    target.classList.add('open', 'show', 'animated', 'bounceIn');
+function clickCard_Listener() {
+    this.classList.add('open', 'show', 'animated', 'bounceIn');
     
-    openCards(target);    
+    openCards(this);
 }
 
 
@@ -200,9 +199,13 @@ function restartDeck_Listener() {
         open = [];
     }
 
+    // remove startTimer calss from card parent node to restart the timer when click on the first card
+    card.parentNode.classList.remove('startTimer');
+
     // reset move counter and timer to starting state
     counter = 0;
-    secondsLabel.innerHTML = '00'
+    secondsLabel.innerHTML = '00';
+    minutesLabel.innerHTML = '00';
     clearInterval(timer);
     totalSeconds = 0;
     moveBox.innerHTML = counter;
