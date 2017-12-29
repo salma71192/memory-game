@@ -1,6 +1,3 @@
-/**
- * @author Salma Mohammed
- */
 
 // Create a list that holds all the cards symbols
 let cardSymbols = [
@@ -15,9 +12,10 @@ let cardSymbols = [
 ];
 
 let deck = document.getElementById('deck'),
-    cardSymbol, li, cards;
+    cardSymbol;
 
-// Shuffle cards
+
+// Shuffle cards function: to shuffle cards symbols
 function shuffle(array) {
     var currentIndex = array.length,
         temporaryValue, randomIndex;
@@ -33,6 +31,7 @@ function shuffle(array) {
     return array;
 }
 
+
 // Create card HTML 
 function CardHTML() {
     for (let i = 0; i <= cardSymbols.length - 1; i++) {
@@ -41,87 +40,84 @@ function CardHTML() {
     }
 }
 
-// game initialization
+
+// game initialization: add cards Html and shuffle the cards.
 (function gameInit() {
     'use strict';
     shuffle(cardSymbols);
     CardHTML();
 })();
 
-// Redeclare cards array to iterate after Li created
-li = deck.getElementsByTagName('li');
-cards = [...li];
 
-let open = [],
+// Redeclare cards array to iterate after Li created
+let li = deck.getElementsByTagName('li'),
+    cards = [...li],
+    open = [],
     moveBox = document.getElementById('moves'),
     counter = 0,
     gameContainer = document.getElementById('container'),
     winBox = document.getElementById('win'),
     winParagraph = winBox.querySelector('p'),
     winButton = winBox.querySelector('button'),
+    restartBtn = document.getElementById('restart-btn'),
+    stars = document.querySelectorAll('.fa-star'),
     starNumber = 3,
     starString = ' stars',
     timer;
 
-// counter Function 
+
+// counter Function to count number of moves player make and display them in the document.
 function moveCounter() {
     counter++;
     moveBox.innerHTML = counter;
 }
 
-// add open cards to open list and check that it only receive two cards
-// Can you hear?yes but you don't? I dont hear you
 
+// add open cards to open list and check that it only receive two cards.
 function openCards(card) {
     // Build up open cards
     let promise = new Promise((resolve) => {
-        if (card.classList.contains('open', 'show') && !card.classList.contains('opened')) {
-            
+        // push open cards to open array & prevent adding the same card.
+        if (card.classList.contains('open', 'show') && !card.classList.contains('opened')) {            
             card.classList.add('opened');
             open.push(card);
             resolve(open);
 
-            //start timer with first card clicked
+            //start timer with first card clicked only.
             if(!card.parentNode.classList.contains('startTimer')) {
                 card.parentNode.classList.add('startTimer');
                 timer = setInterval(setTime, 1000);
-            } else {
-                console.log("stimer has already started");
             }
-            
-            
+
         } else {
+            // if the card already in the open array "already opened":
+            // if already matched with another card. alert "Matched card!".
             if(card.classList.contains('match')) {
                 alert('Matched card!');
             } else {
+                // if just opened. flip it and remove it from the open array.
                 card.classList.remove('open', 'show', 'animated', 'bounceIn', 'opened');
                 open.pop(-1);
-            }
-            
+            }            
         }
-        
-       
     });
+    // after adding open cards successfuly. check matching.
     promise.then((open) => {
-    		// Check if cards match or not 
+    		// Check if open array has two cards then start matching. 
 	        if (open.length % 2 === 0 && open.length > 0) {
-                console.log(open);
-
 	            if (open[open.length - 1].childNodes[0].className == open[open.length - 2].childNodes[0].className) {
+                    // keep cards open through matchcards function.
 	                matchedCards();
+                    // move counter
 	                moveCounter();
 	            } else {
+                    // flip cards if not matched through matchcards function.
 	                UnmatchedCards();
 	                moveCounter();
 	            }
 	        }
-    	
     });
-
-    starCounter();
 }
-let stars = document.querySelectorAll('.fa-star');
-
 
 
 // match function to lock up matched cards in open position
@@ -131,7 +127,7 @@ function matchedCards() {
             openItem.classList.remove('bounceIn');
             openItem.classList.add('match','rubberBand');
         });
-    
+    // if all matched. player wins.
     if (open.length === 16) {
         win();
     }
@@ -163,13 +159,12 @@ function UnmatchedCards() {
         });
 }
 
+
 // Event Listener Function: when click on a card
 function clickCard_Listener() {
-    this.classList.add('open', 'show', 'animated', 'bounceIn');
-    
+    this.classList.add('open', 'show', 'animated', 'bounceIn');    
     openCards(this);
 }
-
 
 
 // function to open cards
@@ -177,8 +172,8 @@ function clickCard_Listener() {
     for (card of cards) {
         card.addEventListener('click', clickCard_Listener);
     }
-
 })();
+
 
 // flip cards to original state
 function flipCards(openItem) {
@@ -189,9 +184,8 @@ function flipCards(openItem) {
     }, 700);
 }
 
-// restart function
-let restartBtn = document.getElementById('restart-btn');
 
+// restart function
 function restartDeck_Listener() {
     // reset all cards to the flipped over position
     for (card of cards) {
@@ -219,9 +213,11 @@ function restartDeck_Listener() {
     shuffle(cardSymbols);
 }
 
+
 (function restartDeck() {
     restartBtn.addEventListener('click', restartDeck_Listener);
 })();
+
 
 // function play again to restart the game when click on play again button
 function playAgain() {
@@ -232,6 +228,8 @@ function playAgain() {
     }, 500);
 }
 
+
+// restart game when clicking on play again button.
 (function() {
     winButton.addEventListener('click', playAgain);
 })();
