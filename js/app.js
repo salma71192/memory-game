@@ -154,7 +154,6 @@ function UnmatchedCards() {
                 flipCards(cardItem);
                 cardItem.classList.remove('opened');
                 open.pop(unmatchesCardsDelete);
-                console.log(open);
             }, 500);
         });
 }
